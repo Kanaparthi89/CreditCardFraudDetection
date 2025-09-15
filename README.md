@@ -1,113 +1,95 @@
-# Credit Card Fraud Detection Using Machine Learning 🚀
+# Credit Card Fraud Detection
 
-![Python](https://img.shields.io/badge/python-3.10-blue) ![ML](https://img.shields.io/badge/Machine%20Learning-green)
-
-## 📌 Introduction
-
-Credit card fraud is a major financial concern, causing billions in losses every year. Machine learning enables the detection of fraudulent transactions by identifying unusual patterns in transaction data. This project uses supervised learning techniques on the [Kaggle Credit Card Fraud Detection dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) to predict fraudulent transactions effectively.
+A machine learning project to detect fraudulent credit card transactions using Python. This project handles severe class imbalance and evaluates multiple models for fraud detection.
 
 ---
 
-## 📊 Dataset Overview
+## Table of Contents
 
-* **Source:** Kaggle Credit Card Fraud Detection dataset
-* **Size:** 284,807 transactions
-* **Features:** 30 numerical features (`V1–V28`, `Time`, `Amount`)
-* **Target:** `Class` (0 = legitimate, 1 = fraud)
-* **Class Imbalance:** Only 0.2% of transactions are fraudulent
-
----
-
-## 🛠️ Data Preprocessing
-
-Steps taken to prepare the data for modeling:
-
-1. **Missing Values:** Checked and none found.
-2. **Scaling:** Standardized `Amount` and `Time`.
-3. **Train-Test Split:** 80% training, 20% testing.
-4. **Class Imbalance Handling:** SMOTE (Synthetic Minority Oversampling Technique) used to oversample fraud cases.
-
-```python
-from imblearn.over_sampling import SMOTE
-smote = SMOTE(random_state=42)
-X_res, y_res = smote.fit_resample(X_train, y_train)
-```
+1. [Project Overview](#project-overview)  
+2. [Dataset](#dataset)  
+3. [Exploratory Data Analysis](#exploratory-data-analysis)  
+4. [Modeling](#modeling)  
+5. [Results](#results)  
+6. [Conclusion](#conclusion)  
+7. [Folder Structure](#folder-structure)  
 
 ---
 
-## 📈 Exploratory Data Analysis (EDA)
+## Project Overview
 
-### 1️⃣ Class Distribution
-
-Severe imbalance observed: 99.8% legitimate vs 0.2% fraudulent transactions.
-
-![Class Distribution](class_distribution.jpg)
-
-### 2️⃣ Correlation Heatmap
-
-Most PCA features show low correlation, confirming dimensionality reduction.
-
-![Correlation Heatmap](correlation_heatmap.jpg)
-
-### 3️⃣ Transaction Amount Distribution
-
-Fraudulent transactions tend to cluster at lower amounts (< \$200).
-
-![Transaction Amount Distribution](transaction_amount.jpg)
+Credit card fraud is a significant problem in the financial industry. Detecting fraudulent transactions in real-time can save companies millions of dollars. This project applies supervised machine learning techniques to classify transactions as fraudulent or legitimate.
 
 ---
 
-## 🤖 Modeling
+## Dataset
 
-### Algorithms Used
+- Source: [Kaggle Credit Card Fraud Detection Dataset](https://www.kaggle.com/mlg-ulb/creditcardfraud)  
+- Features: 28 anonymized PCA features + `Amount` and `Time`  
+- Imbalance: 99.8% legitimate vs 0.2% fraudulent transactions
 
-* Logistic Regression
-* Random Forest Classifier
-* XGBoost Classifier
+---
 
-### Training
+## Exploratory Data Analysis
 
-Models were trained on the SMOTE-resampled dataset and evaluated using metrics such as ROC-AUC, Precision, Recall, and F1-Score.
+### Class Distribution
+![Class Distribution](Plots_hd/class_distribution.png)
+
+### Correlation Heatmap
+![Correlation Heatmap](Plots_hd/correlation_heatmap.png)
+
+### Transaction Amount Distribution
+![Transaction Amount Distribution](Plots_hd/transaction_amount.png)
+
+---
+
+## Modeling
+
+Multiple machine learning models were evaluated:
+
+- Logistic Regression  
+- Random Forest  
+- Support Vector Machine  
+- K-Nearest Neighbors  
+- Decision Tree  
+
+**Example Python snippet:**
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
-rf = RandomForestClassifier(random_state=42)
-rf.fit(X_res, y_res)
-```
 
----
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+Results
 
-## 📊 Model Evaluation
+ROC Curves for different models:
 
-| Model               | Precision | Recall | F1-Score | ROC-AUC |
-| ------------------- | --------- | ------ | -------- | ------- |
-| Logistic Regression | 0.72      | 0.62   | 0.67     | 0.95    |
-| Random Forest       | 0.89      | 0.85   | 0.87     | 0.99    |
-| XGBoost             | 0.88      | 0.83   | 0.85     | 0.99    |
+![Decision Tree ROC](Plots_hd/Decision Tree_ROC.png)
+![K-Nearest Neighbors ROC](Plots_hd/K-Nearest Neighbors_ROC.png)
+![Logistic Regression ROC](Plots_hd/Logistic Regression_ROC.png)
+![Support Vector Machine ROC](Plots_hd/Support Vector Machine_ROC.png)
 
-![ROC Curve](roc_curve.jpg)
+Random Forest achieved the best balance of precision and recall.
 
-**Observation:** Random Forest achieved the best balance between recall and precision, making it suitable for detecting fraudulent transactions.
+SMOTE improved recall but requires careful handling to avoid overfitting.
 
----
+Conclusion
 
-## ✅ Conclusion
-
-This project demonstrates that machine learning, particularly Random Forest, can effectively detect credit card fraud even under severe class imbalance. While preprocessing and SMOTE improved recall, precision-recall trade-offs remain a challenge.
-
-**Future Work:**
-
-* Explore deep learning models and ensemble stacking.
-* Implement real-time fraud detection pipelines.
-* Evaluate anomaly detection approaches for zero-day fraud patterns.
-
----
-
-## 📂 Project Files
-
-* `README.md` (this file)
-* `fraud_detection.ipynb` (or `.py` scripts for code)
-* `class_distribution.jpg`
-* `correlation_heatmap.jpg`
-* `transaction_amount.jpg`
-* `roc_curve.jpg`
+This project demonstrates that machine learning methods, particularly Random Forest, are effective for credit card fraud detection under severe class imbalance.
+Future work could explore deep learning, ensemble stacking, and real-time deployment.
+CreditCardFraudDetection/
+│
+├── Credit Card Fraud Detection.ipynb
+├── README.md
+├── Plots_hd/
+│   ├── class_distribution.png
+│   ├── correlation_heatmap.png
+│   ├── transaction_amount.png
+│   ├── Decision Tree_ROC.png
+│   ├── K-Nearest Neighbors_ROC.png
+│   ├── Logistic Regression_ROC.png
+│   └── Support Vector Machine_ROC.png
+Requirements
+# Install dependencies
+pip install pandas numpy matplotlib seaborn scikit-learn imbalanced-learn
